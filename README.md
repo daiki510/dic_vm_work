@@ -2,8 +2,11 @@
 require "/Users/ddgg7755/DIC/workspace/vending-_machine/lib/vm_stock.rb"
 vm = VendingMachine.new
 vm.insert(500)
-vm.judge_available_drinks
+vm.judge_with_price
+vm.judge_with_stock
+vm.available_drinks
 vm.select_drink(1)
+vm.current_total_money
 vm.check_sales
 
 vm.select_drink
