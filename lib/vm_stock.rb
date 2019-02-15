@@ -27,39 +27,25 @@ class VendingMachine
     return false unless MONEY.include?(money)
     @total_money += money
   end
-  
-  
-  #購入できる飲み物を確認する
-  # def available_drinks
-  #   puts "--------------------------"
-  #   @available_drinks.each.with_index(1) do |available_drink, i|
-  #     puts "番号：#{i}"
-  #     puts "種類：#{available_drink[:name]}"
-  #     puts "金額：#{available_drink[:price]}円"
-  #     puts "--------------------------"
-  #   end
-  # end
 
-  #購入できる飲み物を判断する
-  def judge_available_drinks
-    @available_drinks = []
-    [Drink.coke.to_h, Drink.red_bull.to_h, Drink.water.to_h].each do |judged_drink|
-      if @total_money >= judged_drink[:price]
-        @available_drinks << judged_drink
-      end
-    end
-    # puts "--------------------------"
-    # @available_drinks.each.with_index(1) do |available_drink, i|
-    #   puts "番号：#{i}"
-    #   puts "種類：#{available_drink[:name]}"
-    #   puts "金額：#{available_drink[:price]}円"
-    #   puts "--------------------------"
-    # end
+  #金額にて購入できる飲み物を判断する
+  def judge_with_price
+    @judge_drinks = [Drink.coke.to_h, Drink.red_bull.to_h, Drink.water.to_h].select {|judged_drink| @total_money >= judged_drink[:price]}  
   end
 
-  def stocks(drink_name)
-    if @stocks[:drink_name] > 0
-      puts "OK"
+  #在庫にて購入できる飲み物を判断する
+  def judge_with_stock
+    @available_drinks = @judge_drinks.select {|drink| @stocks[drink[:name].to_sym] > 0}
+  end
+
+  #購入できる飲み物を確認する
+  def available_drinks
+    puts "--------------------------"
+    @available_drinks.each.with_index(1) do |available_drink, i|
+      puts "番号：#{i}"
+      puts "種類：#{available_drink[:name]}"
+      puts "金額：#{available_drink[:price]}円"
+      puts "--------------------------"
     end
   end
 
@@ -69,20 +55,12 @@ class VendingMachine
   def select_drink(drink_number)
     @selected_drink = @available_drinks[drink_number - 1]
     puts "購入する飲み物：#{@selected_drink[:name]}"
-
     @total_money -= @selected_drink[:price]
-    @total_sales += @selected_drink[:price]
-    # require 'byebug'; byebug
   end
-
-  # # 飲み物を買う
-  # def purchase_drink
-    
-  # end
 
   #売り上げ金額を確認する
   def check_sales
-    @total_sales
+    @total_sales += @selected_drink[:price]
   end
 
   #飲み物を補充する
@@ -107,8 +85,9 @@ if $0 == __FILE__
   end
   puts "現在の投入金額: #{vm.current_total_money}円"
   puts "購入可能な飲み物一覧"
-  vm.judge_available_drinks
-  # vm.available_drinks
+  vm.judge_with_price
+  vm.judge_with_stock
+  vm.available_drinks
   vm.select_drink(1)
   puts "購入する飲み物：#{@selected_drink[:name]}"
   puts "残額：#{vm.current_total_money}円"
