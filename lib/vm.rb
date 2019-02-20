@@ -33,14 +33,10 @@ class VendingMachine
     @total_money += money
   end
 
-  #金額にて購入できる飲み物を判断する
+  #金額・在庫より購入できる飲み物を判断する
   def judge
-    drinks = [Drink.coke.to_h, Drink.red_bull.to_h, Drink.water.to_h].select { |drink| @total_money >= drink[:price] }
+    drinks = [Drink.coke.to_h, Drink.red_bull.to_h, Drink.water.to_h].select {|drink| @total_money >= drink[:price] }
     drinks.select { |drink| @stocks[drink[:name].to_sym] > 0 }
-  end
-
-  #在庫にて購入できる飲み物を判断する
-  def judge_with_stock
   end
 
   #購入できる飲み物を確認する
@@ -60,19 +56,14 @@ class VendingMachine
   # 飲み物を選び、購入する
   def select_drink(drink_number)
     available_drinks = judge
-    @selected_drink = available_drinks[drink_number - 1]
-    @stocks[@selected_drink[:name].to_sym] -= 1
-    #-----------------修正必要---------------------------------------------------
-    @total_money -= @selected_drink[:price]
-    
-    @total_sales += @selected_drink[:price] #メソッドを使うと、売り上げ金額が出力されてしまう
-    #---------------------------------------------------------------------------
-    puts "購入した飲み物：#{@selected_drink[:name]}"
-  end
+    selected_drink = available_drinks[drink_number - 1]
+    @stocks[selected_drink[:name].to_sym] -= 1
 
-  #飲み物の在庫を確認する
-  def stock_drink
-    @stocks
+    #合計金額を計算
+    @total_money -= selected_drink[:price]
+    #売上金額を計算
+    @total_sales += selected_drink[:price] 
+    puts "購入した飲み物：#{selected_drink[:name]}"
   end
 
   #飲み物を補充する
@@ -80,6 +71,7 @@ class VendingMachine
     @stocks[drink_name] += stock
   end
 
+  #飲み物の在庫を確認する
   def stock_info
     puts "在庫状況"
     puts "---------------------------------"
