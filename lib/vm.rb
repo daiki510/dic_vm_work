@@ -53,7 +53,7 @@ class VendingMachine
 
   # require 'byebug'; byebug
 
-  # 飲み物を選び、購入する
+  # 飲み物を選び購入する
   def select_drink(drink_number)
     available_drinks = judge
     selected_drink = available_drinks[drink_number - 1]
@@ -64,6 +64,19 @@ class VendingMachine
     #売上金額を計算
     @total_sales += selected_drink[:price] 
     puts "購入した飲み物：#{selected_drink[:name]}"
+  end
+
+  # ランダムで飲み物を選び購入する
+  def random
+    available_drinks = judge
+    random_drink = available_drinks.sample
+
+    @stocks[random_drink[:name].to_sym] -= 1
+    #合計金額を計算
+    @total_money -= random_drink[:price]
+    #売上金額を計算
+    @total_sales += random_drink[:price] 
+    puts "購入した飲み物：#{random_drink[:name]}"
   end
 
   #飲み物を補充する
@@ -95,7 +108,6 @@ if $0 == __FILE__
   #１週目
   puts "購入可能な飲み物一覧"
   vm.judge
-  # vm.judge_with_stock
   vm.available_drinks
   vm.select_drink(1)
   puts "残金：#{vm.current_total_money}円"
@@ -105,9 +117,8 @@ if $0 == __FILE__
   #２週目
   puts "購入可能な飲み物一覧"
   vm.judge
-  # vm.judge_with_stock
   vm.available_drinks
-  vm.select_drink(1)
+  vm.random
   puts "残金：#{vm.current_total_money}円"
   puts "売上金額：#{vm.check_sales}円"
   vm.stock_info
@@ -122,7 +133,6 @@ if $0 == __FILE__
   #３週目
   puts "購入可能な飲み物一覧"
   vm.judge
-  # vm.judge_with_stock
   vm.available_drinks
   vm.select_drink(1)
   puts "残金：#{vm.current_total_money}円"
