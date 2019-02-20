@@ -2,16 +2,18 @@
 require "/Users/ddgg7755/DIC/workspace/vending-_machine/lib/vm_stock.rb"
 vm = VendingMachine.new
 vm.insert(500)
-vm.judge_with_price
-vm.judge_with_stock
+vm.judge
 vm.available_drinks
 vm.select_drink(1)
+vm.random
 vm.current_total_money
 vm.check_sales
 
-vm.select_drink
-
-vm.current_slot_money
+### 在庫補充
+vm.store_drink(:Coke, 5)
+vm.store_drink(:Red_bull, 5)
+vm.store_drink(:Water, 5)
+vm.stock_info
 
 ## 課題
 > ステップ０　お金の投入と払い戻し
