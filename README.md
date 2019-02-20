@@ -1,13 +1,10 @@
 ## 手順
-require "/Users/ddgg7755/DIC/workspace/vending-_machine/lib/vm_stock.rb"
+require "/Users/ddgg7755/DIC/applications/vending_machine/lib/vm.rb"
 vm = VendingMachine.new
 vm.insert(500)
-vm.judge
-vm.available_drinks
 vm.select_drink(1)
-vm.random
 vm.current_total_money
-vm.check_sales
+vm.current_total_sales
 
 ### 在庫補充
 vm.store_drink(:Coke, 5)

@@ -44,12 +44,10 @@ class VendingMachine
   # 飲み物を選択・購入
   def select_drink(drink_number)
     available_drinks = judge
-    if drink_number == available_drinks.size + 1
-      @selected_drink = available_drinks.sample
-    else
-      @selected_drink = available_drinks[drink_number - 1]
-    end
+    drink_number == available_drinks.size + 1 ? @selected_drink = available_drinks.sample : @selected_drink = available_drinks[drink_number - 1]
+
     calculate
+    puts "購入した飲み物：#{@selected_drink[:name]}"
   end
 
   def calculate
@@ -59,7 +57,6 @@ class VendingMachine
     @total_money -= @selected_drink[:price]
     #売上金額を計算
     @total_sales += @selected_drink[:price] 
-    puts "購入した飲み物：#{@selected_drink[:name]}"
   end
 
   #飲み物を補充
