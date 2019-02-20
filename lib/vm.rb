@@ -34,19 +34,20 @@ class VendingMachine
   end
 
   #金額にて購入できる飲み物を判断する
-  def judge_with_price
-    @judge_drinks = [Drink.coke.to_h, Drink.red_bull.to_h, Drink.water.to_h].select {|judged_drink| @total_money >= judged_drink[:price]}  
+  def judge
+    drinks = [Drink.coke.to_h, Drink.red_bull.to_h, Drink.water.to_h].select { |drink| @total_money >= drink[:price] }
+    drinks.select { |drink| @stocks[drink[:name].to_sym] > 0 }
   end
 
   #在庫にて購入できる飲み物を判断する
   def judge_with_stock
-    @available_drinks = @judge_drinks.select {|drink| @stocks[drink[:name].to_sym] > 0}
   end
 
   #購入できる飲み物を確認する
   def available_drinks
+    available_drinks = judge
     puts "--------------------------"
-    @available_drinks.each.with_index(1) do |available_drink, i|
+    available_drinks.each.with_index(1) do |available_drink, i|
       puts "番号：#{i}"
       puts "種類：#{available_drink[:name]}"
       puts "金額：#{available_drink[:price]}円"
@@ -58,14 +59,15 @@ class VendingMachine
 
   # 飲み物を選び、購入する
   def select_drink(drink_number)
-    @selected_drink = @available_drinks[drink_number - 1]
-    puts "購入した飲み物：#{@selected_drink[:name]}"
+    available_drinks = judge
+    @selected_drink = available_drinks[drink_number - 1]
     @stocks[@selected_drink[:name].to_sym] -= 1
     #-----------------修正必要---------------------------------------------------
     @total_money -= @selected_drink[:price]
     
     @total_sales += @selected_drink[:price] #メソッドを使うと、売り上げ金額が出力されてしまう
     #---------------------------------------------------------------------------
+    puts "購入した飲み物：#{@selected_drink[:name]}"
   end
 
   #飲み物の在庫を確認する
@@ -86,8 +88,6 @@ class VendingMachine
     end
     puts "---------------------------------"
   end
-
-
 end
 
 if $0 == __FILE__
@@ -102,8 +102,8 @@ if $0 == __FILE__
 
   #１週目
   puts "購入可能な飲み物一覧"
-  vm.judge_with_price
-  vm.judge_with_stock
+  vm.judge
+  # vm.judge_with_stock
   vm.available_drinks
   vm.select_drink(1)
   puts "残金：#{vm.current_total_money}円"
@@ -112,8 +112,8 @@ if $0 == __FILE__
 
   #２週目
   puts "購入可能な飲み物一覧"
-  vm.judge_with_price
-  vm.judge_with_stock
+  vm.judge
+  # vm.judge_with_stock
   vm.available_drinks
   vm.select_drink(1)
   puts "残金：#{vm.current_total_money}円"
@@ -129,8 +129,8 @@ if $0 == __FILE__
 
   #３週目
   puts "購入可能な飲み物一覧"
-  vm.judge_with_price
-  vm.judge_with_stock
+  vm.judge
+  # vm.judge_with_stock
   vm.available_drinks
   vm.select_drink(1)
   puts "残金：#{vm.current_total_money}円"
