@@ -4,12 +4,13 @@ require_relative 'drink'
 class VendingMachine
 
   MONEY = [10, 50, 100, 500, 1000].freeze
+  DRINK = [Drink.coke, Drink.red_bull, Drink.water, Drink.tea]
   
   #初期値
   def initialize
     @total_money = 0
     @total_sales = 0
-    @stocks = {Coke: 1, Red_bull: 1, Water: 1}
+    @stocks = {Coke: 1, Red_bull: 1, Water: 1, Tea: 0}
     @selected_drink = []
   end
 
@@ -37,8 +38,22 @@ class VendingMachine
 
   #金額・在庫より購入できる飲み物を判断
   def judge
-    drinks = [Drink.coke.to_h, Drink.red_bull.to_h, Drink.water.to_h].select {|drink| @total_money >= drink[:price] }
+    #投入金額より低い飲み物を抽出
+    drinks = DRINK.select {|drink| @total_money >= drink[:price] }
+
+    #在庫数が1本以上の飲み物を抽出
     drinks.select { |drink| @stocks[drink[:name].to_sym] > 0 }
+  end
+
+  #購入できる飲み物を一覧で表示
+  def available_drink_list
+    available_drinks = judge
+    available_drinks.each.with_index(1) do |available_drink, i|
+      puts "番号：#{i} #{available_drink[:price]}円 #{available_drink[:name]}"
+      puts "--------------------------"
+    end
+    puts "番号：#{available_drinks.size + 1} ランダム"
+    puts "--------------------------"
   end
 
   # 飲み物を選択・購入
@@ -50,6 +65,7 @@ class VendingMachine
     puts "購入した飲み物：#{@selected_drink[:name]}"
   end
 
+  # 各変数を計算
   def calculate
     #在庫数を計算
     @stocks[@selected_drink[:name].to_sym] -= 1
@@ -73,89 +89,4 @@ class VendingMachine
     end
     puts "---------------------------------"
   end
-end
-
-#処理の流れ
-if $0 == __FILE__
-  vm = VendingMachine.new
-  money = 1000
-  if vm.insert(money)
-    puts "#{money}円が投入されました"
-  else
-    puts "投入不可のため、返却されました"
-  end
-  puts "現在の投入金額: #{vm.current_total_money}円"
-
-  #１週目
-  puts "購入可能な飲み物一覧"
-  available_drinks = vm.judge
-  puts "--------------------------"
-  available_drinks.each.with_index(1) do |available_drink, i|
-    puts "番号：#{i}"
-    puts "種類：#{available_drink[:name]}"
-    puts "金額：#{available_drink[:price]}円"
-    puts "--------------------------"
-  end
-  puts "番号：#{available_drinks.size + 1}(ランダム)"
-  puts "種類：??"
-  puts "金額：??円"
-  puts "--------------------------"
-
-  vm.select_drink(4)
-  puts "残金：#{vm.current_total_money}円"
-  puts "売上金額：#{vm.current_total_sales}円"
-  vm.stock_info
-
-  #２週目
-  puts "購入可能な飲み物一覧"
-  available_drinks = vm.judge
-  puts "--------------------------"
-  available_drinks.each.with_index(1) do |available_drink, i|
-    puts "番号：#{i}"
-    puts "種類：#{available_drink[:name]}"
-    puts "金額：#{available_drink[:price]}円"
-    puts "--------------------------"
-  end
-  puts "番号：#{available_drinks.size + 1}(ランダム)"
-  puts "種類：??"
-  puts "金額：??円"
-  puts "--------------------------"
-  vm.select_drink(1)
-  puts "残金：#{vm.current_total_money}円"
-  puts "売上金額：#{vm.current_total_sales}円"
-  vm.stock_info
-
-  #在庫補充
-  puts "在庫補充"
-  vm.store_drink(:Coke, 5)
-  vm.store_drink(:Red_bull, 5)
-  vm.store_drink(:Water, 5)
-  vm.stock_info
-
-  #３週目
-  puts "購入可能な飲み物一覧"
-  available_drinks = vm.judge
-  puts "--------------------------"
-  available_drinks.each.with_index(1) do |available_drink, i|
-    puts "番号：#{i}"
-    puts "種類：#{available_drink[:name]}"
-    puts "金額：#{available_drink[:price]}円"
-    puts "--------------------------"
-  end
-  puts "番号：#{available_drinks.size + 1}(ランダム)"
-  puts "種類：??"
-  puts "金額：??円"
-  puts "--------------------------"
-  vm.select_drink(1)
-  puts "残金：#{vm.current_total_money}円"
-  puts "売上金額：#{vm.current_total_sales}円"
-  vm.stock_info
-  vm.return_money
-
-  #在庫補充
-  puts "在庫補充"
-  vm.store_drink(:Coke, 5)
-  vm.store_drink(:Red_bull, 5)
-  vm.store_drink(:Water, 5)
-  vm.stock_info
 end
