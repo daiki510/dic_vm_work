@@ -1,8 +1,13 @@
 # 自動販売機プログラム
 
-`lib/vm.rb`: 【メイン】自動販売機クラス
-`lib/drink.rb`: 飲み物クラス
-`lib/process.rb`: RunCode用
+> ## ファイル詳細
+> 
+- `lib/vm.rb`: 【メイン】自動販売機クラス
+- `lib/drink.rb`: 飲み物クラス
+- `lib/process.rb`: RunCode用
+
+> ## 開発環境
+Ruby 2.5.3
 
 > ## 動作の流れ
 1. 自動販売機の起動
