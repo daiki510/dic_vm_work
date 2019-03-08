@@ -33,7 +33,7 @@ puts "売上金額：#{vm.current_total_sales}円"
 vm.stock_info
 
 #在庫補充
-puts "在庫補充"
+puts "在庫補充を実施"
 vm.store_drink(:Coke, 5)
 vm.store_drink(:Red_bull, 5)
 vm.store_drink(:Water, 5)
@@ -51,7 +51,7 @@ vm.stock_info
 vm.return_money
 
 #在庫補充
-puts "在庫補充"
+puts "在庫補充を実施"
 vm.store_drink(:Coke, 5)
 vm.store_drink(:Red_bull, 5)
 vm.store_drink(:Water, 5)

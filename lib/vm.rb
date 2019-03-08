@@ -1,9 +1,9 @@
 require_relative 'drink'
-# require 'byebug'; byebug
 
 class VendingMachine
-
+  #使用できるお金
   MONEY = [10, 50, 100, 500, 1000].freeze
+  #取り扱いのある飲み物
   DRINK = [Drink.coke, Drink.red_bull, Drink.water, Drink.tea]
   
   #初期値
@@ -38,10 +38,10 @@ class VendingMachine
 
   #金額・在庫より購入できる飲み物を判断
   def judge
-    #投入金額より低い飲み物を抽出
+    #投入金額より価格が低い飲み物を抽出
     drinks = DRINK.select {|drink| @total_money >= drink[:price] }
 
-    #在庫数が1本以上の飲み物を抽出
+    #上で抽出した飲み物からさらに在庫数が1本以上の飲み物を抽出
     drinks.select { |drink| @stocks[drink[:name].to_sym] > 0 }
   end
 
@@ -59,6 +59,7 @@ class VendingMachine
   # 飲み物を選択・購入
   def select_drink(drink_number)
     available_drinks = judge
+    #選択購入かランダム購入かで条件分岐
     drink_number == available_drinks.size + 1 ? @selected_drink = available_drinks.sample : @selected_drink = available_drinks[drink_number - 1]
 
     calculate
