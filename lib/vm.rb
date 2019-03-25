@@ -4,7 +4,7 @@ class VendingMachine
   #使用できるお金
   MONEY = [10, 50, 100, 500, 1000].freeze
   #取り扱いのある飲み物
-  DRINKS= [Drink.coke, Drink.red_bull, Drink.water, Drink.tea]
+  DRINKS = [Drink.coke, Drink.red_bull, Drink.water, Drink.tea]
   
   #初期値
   def initialize
